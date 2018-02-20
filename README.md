@@ -1,6 +1,6 @@
 # Cobs
 
-**TODO: Add description**
+Elixir implementation of [Consistent Overhead Byte Stuffing](https://en.wikipedia.org/wiki/Consistent_Overhead_Byte_Stuffing)
 
 ## Installation
 
