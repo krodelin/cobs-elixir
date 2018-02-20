@@ -40,7 +40,7 @@ defmodule Cobs do
   """
   @spec decode(binary()) :: binary()
   def decode(binary)
-  
+
   def decode(<<>>) do
     <<>>
   end
