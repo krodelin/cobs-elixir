@@ -4,18 +4,17 @@ defmodule Cobs.Mixfile do
   def project do
     [
       app: :cobs,
-      version: "0.1.2",
+      version: "0.1.2-hf1",
       elixir: "~> 1.5",
       start_permanent: Mix.env == :prod,
       description: description(),
       package: package(),
       deps: deps(),
-      name: "COBS",
+      name: "Cobs",
       source_url: "https://github.com/krodelin/cobs-elixir",
       homepage_url: "https://github.com/krodelin/cobs-elixir",
       docs: [
-        main: "Cobs", # The main page in the docs
-        # logo: "path/to/logo.png",
+        main: "readme",
         extras: ["README.md"],
       ]
     ]
