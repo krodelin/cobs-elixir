@@ -32,13 +32,8 @@ defmodule Cobs do
   end
 
   def decode(<<ohb, tail :: binary>>) do
-    if ohb == 0 do
-      <<>>
-    else
-      head_length = ohb - 1
-      <<head :: binary - size(head_length), tail :: binary>> = tail
-      head <> <<0>> <> decode(tail)
-    end
-
+    head_length = ohb - 1
+    <<block :: binary - size(head_length), remaining :: binary>> = tail
+    if byte_size(remaining) > 0, do: block <> <<0>> <> decode(remaining), else: block
   end
 end
