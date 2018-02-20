@@ -4,10 +4,14 @@ defmodule Cobs do
   """
 
   @doc """
-  Convert a binary (with `0` bytes) into a COBS encoded binary (without `0` bytes).
+  Encode a binary (with `0` bytes) into a COBS encoded binary (without `0` bytes).
+
+  ## Example
+      iex> Cobs.encode(<<0x01, 0x02, 0x00, 0x03>>)
+      <<0x03, 0x01, 0x02, 0x02, 0x03>>
   """
 
-
+  @spec encode(binary()) :: binary()
   def encode(binary) do
     do_encode(<<>>, binary)
   end
@@ -26,7 +30,17 @@ defmodule Cobs do
     do_encode(head <> <<val>>, tail)
   end
 
+  @doc """
+  Decode COBS encoded binary (without `0` bytes) into a binary (with `0` bytes).
 
+
+  ## Example
+      iex> Cobs.decode(<<0x03, 0x01, 0x02, 0x02, 0x03>>)
+      <<0x01, 0x02, 0x00, 0x03>>
+  """
+  @spec decode(binary()) :: binary()
+  def decode(binary)
+  
   def decode(<<>>) do
     <<>>
   end
