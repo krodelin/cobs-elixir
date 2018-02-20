@@ -4,8 +4,7 @@ Elixir implementation of [Consistent Overhead Byte Stuffing](https://en.wikipedi
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `cobs` to your list of dependencies in `mix.exs`:
+To use `cobs` in your Mix projects, first add Cobs as a dependency:
 
 ```elixir
 def deps do

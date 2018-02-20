@@ -4,7 +4,7 @@ defmodule Cobs.Mixfile do
   def project do
     [
       app: :cobs,
-      version: "0.1.1",
+      version: "0.1.2",
       elixir: "~> 1.5",
       start_permanent: Mix.env == :prod,
       description: description(),
@@ -14,7 +14,7 @@ defmodule Cobs.Mixfile do
       source_url: "https://github.com/krodelin/cobs-elixir",
       homepage_url: "https://github.com/krodelin/cobs-elixir",
       docs: [
-        main: "COBS", # The main page in the docs
+        main: "Cobs", # The main page in the docs
         # logo: "path/to/logo.png",
         extras: ["README.md"],
       ]
@@ -39,7 +39,7 @@ defmodule Cobs.Mixfile do
   end
 
   defp description() do
-    "Elixir implementation of [Consistent Overhead Byte Stuffing](https://en.wikipedia.org/wiki/Consistent_Overhead_Byte_Stuffing)"
+    "Elixir implementation of Consistent Overhead Byte Stuffing"
   end
 
   defp package() do
