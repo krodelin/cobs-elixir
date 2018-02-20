@@ -39,7 +39,7 @@ defmodule Cobs.Mixfile do
   end
 
   defp description() do
-    "Elixir implementation of [Consistent Overhead Byte Stuffing](https://en.wikipedia.org/wiki/Consistent_Overhead_Byte_Stuffing)"
+    "Elixir implementation of Consistent Overhead Byte Stuffing"
   end
 
   defp package() do
