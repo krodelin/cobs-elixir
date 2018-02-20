@@ -10,12 +10,11 @@ defmodule Cobs.Mixfile do
       description: description(),
       package: package(),
       deps: deps(),
-      name: "COBS",
+      name: "Cobs",
       source_url: "https://github.com/krodelin/cobs-elixir",
       homepage_url: "https://github.com/krodelin/cobs-elixir",
       docs: [
-        main: "Cobs", # The main page in the docs
-        # logo: "path/to/logo.png",
+        main: "readme",
         extras: ["README.md"],
       ]
     ]
