@@ -14,7 +14,7 @@ defmodule Cobs.Mixfile do
       source_url: "https://github.com/krodelin/cobs-elixir",
       homepage_url: "https://github.com/krodelin/cobs-elixir",
       docs: [
-        main: "COBS", # The main page in the docs
+        main: "Cobs", # The main page in the docs
         # logo: "path/to/logo.png",
         extras: ["README.md"],
       ]
