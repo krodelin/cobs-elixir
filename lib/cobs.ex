@@ -9,27 +9,45 @@ defmodule Cobs do
   ## Examples
 
       iex> Cobs.encode(<< 0x11, 0x22, 0x00, 0x33 >>)
-      << 0x03, 0x11, 0x22, 0x02, 0x33 >>
+      << 0x03, 0x11, 0x22, 0x02, 0x33, 0x00 >>
+
+      iex> Cobs.decode(<< 0x03, 0x11, 0x22, 0x02, 0x33, 0x00 >>)
+      << 0x11, 0x22, 0x00, 0x33 >>
+
   """
-  def encode binary do
-    {result, buffer} = binary
-                       |> :binary.bin_to_list
-                       |> Enum.reverse
-                       |> Enum.reduce({[], []}, fn (v, a) -> process(v, a) end)
-    result = concat({result, buffer})
-    Kernel.to_string(result)
+
+
+  def encode(binary) do
+    encode(<<>>, binary) <> <<0>>
   end
 
-  defp process(0, {result, buffer}) do
-    {concat({result, buffer}), []}
+  defp encode(head, <<>>) do
+    ohb = byte_size(head) + 1
+    <<ohb>> <> head
   end
 
-  defp process(v, {result, buffer}) do
-    {result, [v | buffer]}
+  defp encode(head, <<0, tail :: binary>>) do
+    ohb = byte_size(head) + 1
+    <<ohb>> <> head <> encode(<<>>, tail)
   end
 
-  defp concat({result, buffer}) do
-    [(length(buffer) + 1) | buffer] ++ result
+  defp encode(head, <<val, tail :: binary>>) do
+    encode(head <> <<val>>, tail)
   end
 
+
+  def decode(<<>>) do
+    <<>>
+  end
+
+  def decode(<<ohb, tail :: binary>>) do
+    if ohb == 0 do
+      <<>>
+    else
+      head_length = ohb - 1
+      <<head :: binary - size(head_length), tail :: binary>> = tail
+      head <> <<0>> <> decode(tail)
+    end
+
+  end
 end
