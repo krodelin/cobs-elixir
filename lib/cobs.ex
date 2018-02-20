@@ -5,34 +5,25 @@ defmodule Cobs do
 
   @doc """
   Convert a binary (with `0` bytes) into a COBS encoded binary (without `0` bytes).
-
-  ## Examples
-
-      iex> Cobs.encode(<< 0x11, 0x22, 0x00, 0x33 >>)
-      << 0x03, 0x11, 0x22, 0x02, 0x33, 0x00 >>
-
-      iex> Cobs.decode(<< 0x03, 0x11, 0x22, 0x02, 0x33, 0x00 >>)
-      << 0x11, 0x22, 0x00, 0x33 >>
-
   """
 
 
   def encode(binary) do
-    encode(<<>>, binary) <> <<0>>
+    do_encode(<<>>, binary)
   end
 
-  defp encode(head, <<>>) do
+  defp do_encode(head, <<>>) do
     ohb = byte_size(head) + 1
     <<ohb>> <> head
   end
 
-  defp encode(head, <<0, tail :: binary>>) do
+  defp do_encode(head, <<0, tail :: binary>>) do
     ohb = byte_size(head) + 1
-    <<ohb>> <> head <> encode(<<>>, tail)
+    <<ohb>> <> head <> do_encode(<<>>, tail)
   end
 
-  defp encode(head, <<val, tail :: binary>>) do
-    encode(head <> <<val>>, tail)
+  defp do_encode(head, <<val, tail :: binary>>) do
+    do_encode(head <> <<val>>, tail)
   end
 
 
