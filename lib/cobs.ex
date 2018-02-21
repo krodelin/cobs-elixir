@@ -11,12 +11,12 @@ defmodule Cobs do
       {:ok, <<0x03, 0x01, 0x02, 0x02, 0x03>>}
   """
 
-  @spec encode(binary()) :: {:ok, binary()} | {:error | any()}
+  @spec encode(binary()) :: {:ok, binary()} | {:error | String.t}
   def encode(binary) do
     if byte_size(binary) <= 254 do
       {:ok, do_encode(<<>>, <<>>, binary)}
     else
-      {:error, nil}
+      {:error, "Binary too long"}
     end
   end
 
@@ -31,6 +31,27 @@ defmodule Cobs do
        do: do_encode(head, block <> <<val>>, tail)
 
   @doc """
+  Encode a binary (with `0` bytes) into a COBS encoded binary (without `0` bytes).
+  Raise an `ArgumentError` on input data exceeding the allowed length (254 bytes)
+
+  ## Example
+      iex> Cobs.encode!(<<0x01, 0x02, 0x00, 0x03>>)
+      <<0x03, 0x01, 0x02, 0x02, 0x03>>
+  """
+
+  @spec encode!(binary()) :: binary()
+  def encode!(binary) do
+    case encode(binary) do
+      {:ok, result} ->
+        result
+      {:error, message} ->
+        raise ArgumentError, message
+      _ ->
+        raise ArgumentError
+    end
+  end
+
+  @doc """
   Decode COBS encoded binary (without `0` bytes) into a binary (with `0` bytes).
 
 
@@ -38,7 +59,7 @@ defmodule Cobs do
       iex> Cobs.decode(<<0x03, 0x01, 0x02, 0x02, 0x03>>)
       {:ok, <<0x01, 0x02, 0x00, 0x03>>}
   """
-  @spec decode(binary()) :: {:ok, binary()} | {:error | any()}
+  @spec decode(binary()) :: {:ok, binary()} | {:error | String.t}
   def decode(binary)
 
   def decode(binary) do
@@ -55,11 +76,32 @@ defmodule Cobs do
   defp do_decode(head, <<ohb, tail :: binary>>) do
     block_length = ohb - 1
     if block_length > byte_size(tail) do
-      {:error, nil}
+      {:error, "Offset byte specifies more bytes than available"}
     else
       <<block :: binary - size(block_length), remaining :: binary>> = tail
       new_head = if byte_size(remaining) > 0, do: head <> block <> <<0>>, else: head <> block
       do_decode(new_head, remaining)
+    end
+  end
+
+  @doc """
+  Decode COBS encoded binary (without `0` bytes) into a binary (with `0` bytes).
+  Raise an `ArgumentError` on invalid input data.
+
+
+  ## Example
+      iex> Cobs.decode!(<<0x03, 0x01, 0x02, 0x02, 0x03>>)
+      <<0x01, 0x02, 0x00, 0x03>>
+  """
+  @spec decode!(binary()) :: binary()
+  def decode!(binary) do
+    case decode(binary) do
+      {:ok, result} ->
+        result
+      {:error, message} ->
+        raise ArgumentError, message
+      _ ->
+        raise ArgumentError
     end
   end
 
