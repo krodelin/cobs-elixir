@@ -38,8 +38,19 @@ defmodule CobsTest do
   end
 
   test "too long" do
-    # encode > 254 <<0 :: size(256)>>
-    # decode where the last ohb > tail size
+    {return, _} = Cobs.encode(<<-1 :: unit(8) - size(254)>>)
+    assert return == :ok
+    {return, _} = Cobs.encode(<<-1 :: unit(8) - size(255)>>)
+    assert return == :error
+    {return, _} = Cobs.encode(<<-1 :: unit(8) - size(256)>>)
+    assert return == :error
   end
 
+  test "invalid" do
+    # The appended binary specifies ten remaining bytes although only one is present
+    invalid = Cobs.encode(<<-1 :: unit(8) - size(253)>>) <> <<10, 0>>
+    {return, _} = Cobs.decode(invalid)
+    assert return == :error
+  end
+  
 end
