@@ -37,12 +37,23 @@ defmodule CobsTest do
     assert return == :error
   end
 
+  test "encode too long exception" do
+    assert_raise ArgumentError, fn -> Cobs.encode! (<<-1 :: unit(8) - size(255)>>) end
+  end
+
   test "decode invalid" do
-    # The appended binary specifies ten remaining bytes although only one is present
-    {:ok, valid} = Cobs.encode(<<-1 :: unit(8) - size(253)>>)
-    invalid = valid <> <<10, 0>>
-    {return, _} = Cobs.decode(invalid)
+    {return, _} = Cobs.decode(invalid_data())
     assert return == :error
+  end
+
+  test "decode invalid exception" do
+    assert_raise ArgumentError, fn -> Cobs.decode!(invalid_data()) end
+  end
+
+  defp invalid_data() do
+    {:ok, valid} = Cobs.encode(<<-1 :: unit(8) - size(253)>>)
+    # The appended binary specifies ten remaining bytes although only one is present
+    valid <> <<10, 0>>
   end
 
 end
