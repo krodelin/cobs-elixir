@@ -4,7 +4,7 @@ defmodule Cobs.Mixfile do
   def project do
     [
       app: :cobs,
-      version: "0.1.2-hf1",
+      version: "0.2.0",
       elixir: "~> 1.5",
       start_permanent: Mix.env == :prod,
       description: description(),

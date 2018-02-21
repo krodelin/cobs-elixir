@@ -9,7 +9,7 @@ To use `cobs` in your Mix projects, first add Cobs as a dependency:
 ```elixir
 def deps do
   [
-    {:cobs, "~> 0.1.0"}
+    {:cobs, "~> 0.2.0"}
   ]
 end
 ```
