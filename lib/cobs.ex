@@ -11,7 +11,7 @@ defmodule Cobs do
       {:ok, <<0x03, 0x01, 0x02, 0x02, 0x03>>}
   """
 
-  @spec encode(binary()) :: {:ok, binary()} | {:error | String.t()}
+  @spec encode(binary()) :: {:ok, binary()} | {:error, String.t()}
   def encode(binary) do
     if byte_size(binary) <= 254 do
       {:ok, do_encode(<<>>, <<>>, binary)}
@@ -49,9 +49,6 @@ defmodule Cobs do
 
       {:error, message} ->
         raise ArgumentError, message
-
-      _ ->
-        raise ArgumentError
     end
   end
 
@@ -63,14 +60,14 @@ defmodule Cobs do
       iex> Cobs.decode(<<0x03, 0x01, 0x02, 0x02, 0x03>>)
       {:ok, <<0x01, 0x02, 0x00, 0x03>>}
   """
-  @spec decode(binary()) :: {:ok, binary()} | {:error | String.t()}
+  @spec decode(binary()) :: {:ok, binary()} | {:error, String.t()}
   def decode(binary)
 
   def decode(binary) do
     do_decode(<<>>, binary)
   end
 
-  @spec do_decode(binary(), binary()) :: {:ok, binary()} | {:error | any()}
+  @spec do_decode(binary(), binary()) :: {:ok, binary()} | {:error, any()}
   defp do_decode(head, tail)
 
   defp do_decode(head, <<>>) do
@@ -106,9 +103,6 @@ defmodule Cobs do
 
       {:error, message} ->
         raise ArgumentError, message
-
-      _ ->
-        raise ArgumentError
     end
   end
 end
