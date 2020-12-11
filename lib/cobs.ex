@@ -11,7 +11,7 @@ defmodule Cobs do
       {:ok, <<0x03, 0x01, 0x02, 0x02, 0x03>>}
   """
 
-  @spec encode(binary()) :: {:ok, binary()} | {:error | String.t}
+  @spec encode(binary()) :: {:ok, binary()} | {:error | String.t()}
   def encode(binary) do
     if byte_size(binary) <= 254 do
       {:ok, do_encode(<<>>, <<>>, binary)}
@@ -24,11 +24,13 @@ defmodule Cobs do
   defp do_encode(head, block, tail)
 
   defp do_encode(head, block, <<>>),
-       do: head <> <<byte_size(block) + 1>> <> block
-  defp do_encode(head, block, <<0, tail :: binary>>),
-       do: do_encode(head <> <<byte_size(block) + 1>> <> block, <<>>, tail)
-  defp do_encode(head, block, <<val, tail :: binary>>),
-       do: do_encode(head, block <> <<val>>, tail)
+    do: head <> <<byte_size(block) + 1>> <> block
+
+  defp do_encode(head, block, <<0, tail::binary>>),
+    do: do_encode(head <> <<byte_size(block) + 1>> <> block, <<>>, tail)
+
+  defp do_encode(head, block, <<val, tail::binary>>),
+    do: do_encode(head, block <> <<val>>, tail)
 
   @doc """
   Encode a binary (with `0` bytes) into a COBS encoded binary (without `0` bytes).
@@ -44,8 +46,10 @@ defmodule Cobs do
     case encode(binary) do
       {:ok, result} ->
         result
+
       {:error, message} ->
         raise ArgumentError, message
+
       _ ->
         raise ArgumentError
     end
@@ -59,7 +63,7 @@ defmodule Cobs do
       iex> Cobs.decode(<<0x03, 0x01, 0x02, 0x02, 0x03>>)
       {:ok, <<0x01, 0x02, 0x00, 0x03>>}
   """
-  @spec decode(binary()) :: {:ok, binary()} | {:error | String.t}
+  @spec decode(binary()) :: {:ok, binary()} | {:error | String.t()}
   def decode(binary)
 
   def decode(binary) do
@@ -73,12 +77,13 @@ defmodule Cobs do
     {:ok, head}
   end
 
-  defp do_decode(head, <<ohb, tail :: binary>>) do
+  defp do_decode(head, <<ohb, tail::binary>>) do
     block_length = ohb - 1
+
     if block_length > byte_size(tail) do
       {:error, "Offset byte specifies more bytes than available"}
     else
-      <<block :: binary - size(block_length), remaining :: binary>> = tail
+      <<block::binary-size(block_length), remaining::binary>> = tail
       new_head = if byte_size(remaining) > 0, do: head <> block <> <<0>>, else: head <> block
       do_decode(new_head, remaining)
     end
@@ -98,11 +103,12 @@ defmodule Cobs do
     case decode(binary) do
       {:ok, result} ->
         result
+
       {:error, message} ->
         raise ArgumentError, message
+
       _ ->
         raise ArgumentError
     end
   end
-
 end
